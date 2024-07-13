@@ -1,0 +1,26 @@
+<script setup>
+
+import Contact from './components/SiteAside/Contact/index.vue'
+</script>
+
+<template>
+  <div id="id" class="test-container">
+    <Contact />
+
+  </div>
+
+</template>
+
+<style lang="less" scoped>
+.test-container {
+  background-color: rgb(0, 0, 0);
+  border: 1px solid;
+  /* text-align: center; */
+  width: 360px;
+  height: 660px;
+  margin: auto;
+  position: relative;
+  /* overflow: hidden; */
+  padding-top: 300px;
+}
+</style>
