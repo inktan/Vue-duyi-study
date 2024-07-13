@@ -51,7 +51,7 @@ function handleLoaded() {
     </div>
 </template>
 
-<style lang="less" scope>
+<style lang="less" scoped>
 @import "../../styles/mixin.less";
 @import "../../styles/var.less";
 

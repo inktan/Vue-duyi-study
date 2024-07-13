@@ -23,7 +23,7 @@ import Avatar from "../Avatar.vue";
     </div>
 </template>
 
-<style lang="less" scope>
+<style lang="less" scoped>
 @import "../../styles/reset.css";
 @import "../../styles/global.less";
 @import "../../styles/var.less";

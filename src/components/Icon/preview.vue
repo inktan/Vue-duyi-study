@@ -22,7 +22,7 @@ export default {
 };
 
 </script>
-<style scope>
+<style scoped>
 .test-container {
     display: flex;
     justify-content: center;

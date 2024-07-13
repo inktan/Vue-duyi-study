@@ -15,8 +15,8 @@ const classMap = {
   mail: "icon-email",
   github: "icon-github",
   qq: "icon-QQ-circle-fill",
-  arrowUp: "icon-shangjiantou",
-  arrowDown: "icon-xiajiantou",
+  arrowUp: "icon-jiantouxiangshang",
+  arrowDown: "icon-jiantouxiangxia",
   empty: "icon-icon_empty",
   chat: "icon-chat1196057easyiconnet1",
 };
@@ -43,7 +43,7 @@ const fontClass = computed(() => {
 
 
 <style scoped>
-@import "//at.alicdn.com/t/c/font_4609986_cm7vh29vu7a.css";
+@import "//at.alicdn.com/t/c/font_4609986_kkaayadfxu.css";
 
 i {
   display: block;

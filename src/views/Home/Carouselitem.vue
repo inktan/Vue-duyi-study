@@ -8,8 +8,8 @@ import { ref, onMounted } from 'vue';
 
 
 </script>
-<style lang="less" scope>
+<style lang="less" scoped>
 .main {
-    padding: 10px;
+    // padding: 10px;
 }
 </style>

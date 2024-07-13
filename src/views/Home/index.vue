@@ -3,6 +3,7 @@ import { inject } from 'vue'
 import { ref, onBeforeMount, onUpdated } from 'vue';
 import { getBanners } from '@/api/banner';
 import Carouselitem from './Carouselitem.vue'
+import Icon from '@/components/Icon/index.vue'
 // 注入全局方法
 // const showMessage = inject('$showMessage');
 
@@ -14,19 +15,29 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <Carouselitem />
     <div v-if="banners.length > 0" class="home-container" id="home" ref="containerRef">
         <ul>
-            <li v-for="item in banners" :key="item.id">{{ item.id + ' ' + item.description }}</li>
+            <li v-for="item in banners" :key="item.id">
+                <Carouselitem />
+            </li>
         </ul>
-        <h1 ref="paraRef">首页</h1>
-        <h1 ref="paraRef">{{ banners.length }}</h1>
+        <div class="icon icon-up">
+            <Icon iconType='arrowUp' />
+        </div>
+        <div class="icon icon-down">
+            <Icon iconType='arrowDown' />
+        </div>
+        <ul class="indicator">
+            <li v-for="item in banners" :key="item.id">~</li>
+        </ul>
     </div>
 </template>
 
-<style lang="less" scope>
+<style lang="less" scoped>
 .home-container {
     background-color: aliceblue;
-    padding: 10px;
+    // padding: 10px;
+    width: 100%;
+    height: 100%;
 }
 </style>

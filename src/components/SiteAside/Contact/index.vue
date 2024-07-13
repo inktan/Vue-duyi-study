@@ -45,7 +45,7 @@ import Icon from "../../Icon/index.vue"
     </ul>
 </template>
 
-<style lang="less" scope>
+<style lang="less" scoped>
 @import "../../../styles/mixin.less";
 @import "../../../styles//var.less";
 
