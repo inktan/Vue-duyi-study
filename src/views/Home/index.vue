@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from 'vue'
-import { ref, onBeforeMount, onUpdated } from 'vue';
+import { ref, onBeforeMount, onMounted, onUpdated, computed, nextTick, watch, } from 'vue';
 import { getBanners } from '@/api/banner';
 import Carouselitem from './Carouselitem.vue'
 import Icon from '@/components/Icon/index.vue'
@@ -8,36 +8,141 @@ import Icon from '@/components/Icon/index.vue'
 // const showMessage = inject('$showMessage');
 
 const banners = ref([])
+const index = ref(0) // 当前是第几张轮播图
+const containerRef = ref(null);
+const containerHeight = ref('0px'); //整个容器的高度
+
+const marginTop = computed(() => {
+    if (containerRef.value) {
+        return -index.value * containerRef.value.clientHeight + 'px';
+    }
+    else {
+        return '0px';
+    }
+})
+
 onBeforeMount(async () => {
     banners.value = await getBanners();
-    // console.log(`the component is onBeforeMount.`)
 })
+
 </script>
 
 <template>
-    <div v-if="banners.length > 0" class="home-container" id="home" ref="containerRef">
-        <ul>
+    <div v-if="banners.length > 0" class="home-container" id="home" :style="{ marginTop: marginTop }">
+        <ul class="banners" ref="containerRef">
             <li v-for="item in banners" :key="item.id">
-                <Carouselitem />
+                <Carouselitem :txt01="item.description"/>
             </li>
         </ul>
         <div class="icon icon-up">
-            <Icon iconType='arrowUp' />
+            <Icon :size="30" iconType='arrowUp' />
         </div>
         <div class="icon icon-down">
-            <Icon iconType='arrowDown' />
+            <Icon :size="30" iconType='arrowDown' />
         </div>
         <ul class="indicator">
-            <li v-for="item in banners" :key="item.id">~</li>
+            <li class="activate" v-for="item in banners" :key="item.id"></li>
         </ul>
     </div>
 </template>
 
 <style lang="less" scoped>
+@import "@/styles/mixin.less";
+@import "@/styles/var.less";
+
 .home-container {
-    background-color: aliceblue;
+    background-color: @dark;
     // padding: 10px;
     width: 100%;
     height: 100%;
+    position: relative;
+
+    .banners {
+        width: 100%;
+        height: 100%;
+        // overflow: auto;
+
+        li {
+            background-color: @dark;
+            width: 100%;
+            height: 100%;
+            color: #fff;
+        }
+    }
+
+    .indicator {
+        .self-center();
+        transform: translateY(-50%);
+        left: auto;
+        right: 10px;
+
+        li {
+            // list-style-type: disc;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: @words;
+            cursor: pointer;
+            margin-bottom: 10px;
+            border: 1px solid #fff;
+
+            &.activate {
+                background: #fff;
+
+            }
+        }
+    }
+
+    .icon {
+        cursor: pointer;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        @gap: 25px;
+        color: @gray;
+
+        &.icon-up {
+            top: @gap;
+            bottom: auto;
+            animation: jump-up 2s infinite;
+        }
+
+        &.icon-down {
+            top: auto;
+            bottom: @gap;
+            animation: jump-down 2s infinite;
+        }
+
+        @jump: 5px;
+
+        @keyframes jump-up {
+            0% {
+                transform: translate(-50%, @jump);
+            }
+
+            50% {
+                transform: translate(-50%, -@jump);
+            }
+
+            100% {
+                transform: translate(-50%, @jump);
+            }
+        }
+
+        @keyframes jump-down {
+            0% {
+                transform: translate(-50%, -@jump);
+            }
+
+            50% {
+                transform: translate(-50%, @jump);
+            }
+
+            100% {
+                transform: translate(-50%, -@jump);
+            }
+        }
+
+    }
 }
 </style>

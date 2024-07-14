@@ -1,11 +1,15 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
-
+import { ref, reactive, computed, onMounted } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-
 import Layout from './components/Layout.vue'
 import SiteAside from "./components/SiteAside/index.vue";
 
+const mainRef = ref(null);
+onMounted(() => {
+  if (mainRef.value) { // 正确地访问 ref 的值
+    console.log(mainRef.value);
+  }
+})
 </script>
 
 <template>
@@ -17,13 +21,13 @@ import SiteAside from "./components/SiteAside/index.vue";
         </div>
       </template>
       <template #main>
-        <div class="main">
+        <div class="main"  ref="mainRef">
           <!-- <RouterLink to="/About">About</RouterLink>
           <RouterLink to="/Blog">Blog</RouterLink>
           <RouterLink to="/">Go to Home</RouterLink>
           <RouterLink to="/Message">Message</RouterLink>
           <RouterLink to="/Project">Project</RouterLink> -->
-          <RouterView />
+          <RouterView/>
 
         </div>
       </template>
@@ -46,6 +50,11 @@ import SiteAside from "./components/SiteAside/index.vue";
 
   .aside {
     width: 250px;
+    height: 100%;
+  }
+
+  .main {
+    width: 100%;
     height: 100%;
   }
 }
