@@ -8,8 +8,9 @@ import Icon from '@/components/Icon/index.vue'
 // const showMessage = inject('$showMessage');
 
 const banners = ref([])
-const index = ref(2) // 当前是第几张轮播图
+const index = ref(0) // 当前是第几张轮播图
 const containerRef = ref(null);
+const switching = ref(false); // 是否正在翻页中
 
 const marginTop = computed(() => {
     if (containerRef.value) {
@@ -25,23 +26,48 @@ onBeforeMount(async () => {
     banners.value = await getBanners();
 })
 
+function switchTo(i) {
+    index.value = i;
+}
+
+function handleWheel(e) {
+    if (switching.value) {
+        return;
+    }
+    // 往上滚动
+    if (e.deltaY < -5 && index.value > 0) {
+        switching.value = true;
+        index.value--;
+    }
+    // 往下滚动
+    else if (e.deltaY > 5 && index.value < banners.value.length - 1) {
+        switching.value = true;
+        index.value++;
+    }
+}
+function handleTransitionEnd() {
+    switching.value = false;
+}
+
 </script>
 
 <template>
-    <div v-if="banners.length > 0" class="home-container" id="home" :style="{ marginTop: marginTop }">
-        <ul class="banners" ref="containerRef">
+    <div v-if="banners.length > 0" class="home-container" id="home" @wheel="handleWheel">
+        <ul class="carousel-container" ref="containerRef" :style="{ marginTop: marginTop }"
+            @transitionend="handleTransitionEnd">
             <li v-for="item in banners" :key="item.id">
                 <Carouselitem :txt01="item.description" />
             </li>
         </ul>
-        <div v-show="index > 0" class="icon icon-up">
+        <div v-show="index > 0" @click="switchTo(index - 1)" class="icon icon-up">
             <Icon :size="30" iconType='arrowUp' />
         </div>
-        <div v-show="index < banners.length" class="icon icon-down">
+        <div v-show="index < banners.length - 1" @click="switchTo(index + 1)" class="icon icon-down">
             <Icon :size="30" iconType='arrowDown' />
         </div>
         <ul class="indicator">
-            <li :class="{ activate: i === index }" v-for="(item, i) in banners" :key="item.id"></li>
+            <li :class="{ activate: i === index }" v-for="(item, i) in banners" :key="item.id" @click="switchTo(i)">
+            </li>
         </ul>
     </div>
 </template>
@@ -52,16 +78,16 @@ onBeforeMount(async () => {
 
 .home-container {
     background-color: @dark;
-    // padding: 10px;
     width: 100%;
     height: 100%;
     position: relative;
-    // overflow: hidden;
+    overflow: hidden; //注意外边距合并
+    // clear: both;
 
-    .banners {
+    .carousel-container {
         width: 100%;
         height: 100%;
-        // overflow: hidden;
+        transition: 500ms;
 
         li {
             background-color: @dark;
