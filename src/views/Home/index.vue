@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from 'vue'
-import { ref, onBeforeMount, onMounted, onUpdated, computed, nextTick, watch, } from 'vue';
+import { ref, onBeforeMount, onMounted, onUpdated, computed, nextTick, watch, onUnmounted } from 'vue';
 import { getBanners } from '@/api/banner';
 import Carouselitem from './Carouselitem.vue'
 import Icon from '@/components/Icon/index.vue'
@@ -11,14 +11,26 @@ const banners = ref([])
 const index = ref(0) // 当前是第几张轮播图
 const containerRef = ref(null);
 const switching = ref(false); // 是否正在翻页中
+const containerHeight = ref(0);
+
+onMounted(() => {
+    window.addEventListener("resize", handleResize);
+})
+
+onUnmounted(() => {
+    window.removeEventListener("resize", handleResize);
+})
+// 实时监控窗口尺寸变化
+function handleResize() {
+    // console.log(-index.value * containerRef.value.clientHeight + 'px');
+    containerHeight.value = containerRef.value.clientHeight;
+}
 
 const marginTop = computed(() => {
     if (containerRef.value) {
-        // console.log(-index.value * containerRef.value.clientHeight + 'px');
-        return -index.value * containerRef.value.clientHeight + 'px';
-    }
-    else {
-        return '0px';
+        if (containerHeight.value === 0)
+            return -index.value * containerRef.value.clientHeight + 'px';
+        return -index.value * containerHeight.value + 'px';
     }
 })
 
@@ -45,6 +57,7 @@ function handleWheel(e) {
         index.value++;
     }
 }
+
 function handleTransitionEnd() {
     switching.value = false;
 }
@@ -56,7 +69,7 @@ function handleTransitionEnd() {
         <ul class="carousel-container" ref="containerRef" :style="{ marginTop: marginTop }"
             @transitionend="handleTransitionEnd">
             <li v-for="item in banners" :key="item.id">
-                <Carouselitem :txt01="item.description" />
+                <Carouselitem :txt01="item.description" :src="item.bigMig" :placeholder="item.bigMig"/>
             </li>
         </ul>
         <div v-show="index > 0" @click="switchTo(index - 1)" class="icon icon-up">
