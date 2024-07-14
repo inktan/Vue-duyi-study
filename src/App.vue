@@ -5,11 +5,11 @@ import Layout from './components/Layout.vue'
 import SiteAside from "./components/SiteAside/index.vue";
 
 const mainRef = ref(null);
-onMounted(() => {
-  if (mainRef.value) { // 正确地访问 ref 的值
-    console.log(mainRef.value);
-  }
-})
+// onMounted(() => {
+//   if (mainRef.value) { // 正确地访问 ref 的值
+//     console.log(mainRef.value);
+//   }
+// })
 </script>
 
 <template>

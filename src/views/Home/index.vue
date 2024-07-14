@@ -8,12 +8,12 @@ import Icon from '@/components/Icon/index.vue'
 // const showMessage = inject('$showMessage');
 
 const banners = ref([])
-const index = ref(0) // 当前是第几张轮播图
+const index = ref(2) // 当前是第几张轮播图
 const containerRef = ref(null);
-const containerHeight = ref('0px'); //整个容器的高度
 
 const marginTop = computed(() => {
     if (containerRef.value) {
+        // console.log(-index.value * containerRef.value.clientHeight + 'px');
         return -index.value * containerRef.value.clientHeight + 'px';
     }
     else {
@@ -31,17 +31,17 @@ onBeforeMount(async () => {
     <div v-if="banners.length > 0" class="home-container" id="home" :style="{ marginTop: marginTop }">
         <ul class="banners" ref="containerRef">
             <li v-for="item in banners" :key="item.id">
-                <Carouselitem :txt01="item.description"/>
+                <Carouselitem :txt01="item.description" />
             </li>
         </ul>
-        <div class="icon icon-up">
+        <div v-show="index > 0" class="icon icon-up">
             <Icon :size="30" iconType='arrowUp' />
         </div>
-        <div class="icon icon-down">
+        <div v-show="index < banners.length" class="icon icon-down">
             <Icon :size="30" iconType='arrowDown' />
         </div>
         <ul class="indicator">
-            <li class="activate" v-for="item in banners" :key="item.id"></li>
+            <li :class="{ activate: i === index }" v-for="(item, i) in banners" :key="item.id"></li>
         </ul>
     </div>
 </template>
@@ -56,11 +56,12 @@ onBeforeMount(async () => {
     width: 100%;
     height: 100%;
     position: relative;
+    // overflow: hidden;
 
     .banners {
         width: 100%;
         height: 100%;
-        // overflow: auto;
+        // overflow: hidden;
 
         li {
             background-color: @dark;
