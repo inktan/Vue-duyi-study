@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import Layout from './components/Layout.vue'
 import SiteAside from "./components/SiteAside/index.vue";
 

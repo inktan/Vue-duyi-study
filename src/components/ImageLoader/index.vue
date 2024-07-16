@@ -28,7 +28,6 @@ const originOpactity = computed(() => {
 
 const emit = defineEmits(['loaded']); // 定义一个名为 'some-event' 的事件
 
-
 function handleLoaded() {
     originLoad.value = true;
     // console.log("原图加载完成")
@@ -56,7 +55,7 @@ function handleLoaded() {
 @import "../../styles/var.less";
 
 .image-loader-contanier {
-    // .self-center(absolute);
+    .self-center(absolute);
     // color: @lightWords;
     // text-align: center;
     width: 100%;
@@ -64,8 +63,10 @@ function handleLoaded() {
     overflow: hidden;
 
     img {
-        .self-fill(absolute);
-        object-fit:contain;
+        width: 100%;
+        height: 100%;
+        // .self-fill(absolute);
+        object-fit: contain;
         object-fit: cover
     }
 

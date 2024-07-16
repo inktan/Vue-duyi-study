@@ -1,17 +1,16 @@
 <script setup>
 import { inject } from 'vue'
 import { ref, onBeforeMount, onMounted, onUpdated, computed, nextTick, watch, onUnmounted } from 'vue';
-import { getBanners } from '@/api/banner';
+import { getBanners } from '@/api';
 import Carouselitem from './Carouselitem.vue'
 import Icon from '@/components/Icon/index.vue'
-// 注入全局方法
-// const showMessage = inject('$showMessage');
 
 const banners = ref([])
 const index = ref(0) // 当前是第几张轮播图
 const containerRef = ref(null);
 const switching = ref(false); // 是否正在翻页中
 const containerHeight = ref(0);
+const loading = ref(true)
 
 onMounted(() => {
     window.addEventListener("resize", handleResize);
@@ -23,7 +22,8 @@ onUnmounted(() => {
 // 实时监控窗口尺寸变化
 function handleResize() {
     // console.log(-index.value * containerRef.value.clientHeight + 'px');
-    containerHeight.value = containerRef.value.clientHeight;
+    if (containerRef.value)
+        containerHeight.value = containerRef.value.clientHeight;
 }
 
 const marginTop = computed(() => {
@@ -36,6 +36,7 @@ const marginTop = computed(() => {
 
 onBeforeMount(async () => {
     banners.value = await getBanners();
+    loading.value = false;
 })
 
 function switchTo(i) {
@@ -65,23 +66,25 @@ function handleTransitionEnd() {
 </script>
 
 <template>
-    <div v-if="banners.length > 0" class="home-container" id="home" @wheel="handleWheel">
-        <ul class="carousel-container" ref="containerRef" :style="{ marginTop: marginTop }"
-            @transitionend="handleTransitionEnd">
-            <li v-for="item in banners" :key="item.id">
-                <Carouselitem :txt01="item.description" :src="item.bigMig" :placeholder="item.bigMig"/>
-            </li>
-        </ul>
-        <div v-show="index > 0" @click="switchTo(index - 1)" class="icon icon-up">
-            <Icon :size="30" iconType='arrowUp' />
+    <div class="loader" v-loading="loading" element-loading-background="rgba(222, 222, 222, 0.5)" element-loading-text="Loading...">
+        <div v-if="banners.length > 0" class="home-container" id="home" @wheel="handleWheel">
+            <ul class="carousel-container" ref="containerRef" :style="{ marginTop: marginTop }"
+                @transitionend="handleTransitionEnd">
+                <li v-for="item in banners" :key="item.id">
+                    <Carouselitem :carousel="item" />
+                </li>
+            </ul>
+            <div v-show="index > 0" @click="switchTo(index - 1)" class="icon icon-up">
+                <Icon :size="30" iconType='arrowUp' />
+            </div>
+            <div v-show="index < banners.length - 1" @click="switchTo(index + 1)" class="icon icon-down">
+                <Icon :size="30" iconType='arrowDown' />
+            </div>
+            <ul class="indicator">
+                <li :class="{ activate: i === index }" v-for="(item, i) in banners" :key="item.id" @click="switchTo(i)">
+                </li>
+            </ul>
         </div>
-        <div v-show="index < banners.length - 1" @click="switchTo(index + 1)" class="icon icon-down">
-            <Icon :size="30" iconType='arrowDown' />
-        </div>
-        <ul class="indicator">
-            <li :class="{ activate: i === index }" v-for="(item, i) in banners" :key="item.id" @click="switchTo(i)">
-            </li>
-        </ul>
     </div>
 </template>
 
@@ -89,13 +92,20 @@ function handleTransitionEnd() {
 @import "@/styles/mixin.less";
 @import "@/styles/var.less";
 
-.home-container {
-    background-color: @dark;
+.loader,.home-container {
+    // background-color: @dark;
     width: 100%;
     height: 100%;
     position: relative;
     overflow: hidden; //注意外边距合并
     // clear: both;
+
+    // 测试
+    // width: 50%;
+    // height: 50%;
+    // overflow: visible;
+    // border: 2px solid #008c8c;
+    // margin: 100px auto;
 
     .carousel-container {
         width: 100%;
@@ -103,7 +113,7 @@ function handleTransitionEnd() {
         transition: 500ms;
 
         li {
-            background-color: @dark;
+            // background-color: @dark;
             width: 100%;
             height: 100%;
             color: #fff;
