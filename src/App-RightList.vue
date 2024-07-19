@@ -1,5 +1,5 @@
 <script setup>
-import RightList from '@/views/Blog/componets/RightList.vue'
+import RightList from '@/views/Blog/components/RightList.vue'
 import { ref, onBeforeMount, onMounted, onUpdated, computed, nextTick, watch, onUnmounted } from 'vue';
 
 const listData = ref([

@@ -31,14 +31,13 @@ const items = ref(
         title: '留言板',
         icon: 'chat',
         exeact: true // 是否启动精确匹配
-
     }])
 
 </script>
 
 <template>
     <nav class="menu-contanier">
-        <RouterLink :exact="item.exeact" :to="{ name: item.name }" v-for="item in items" :key="item.link"
+        <RouterLink :exact="item.exeact" :to="{ name: item.name }" v-for="item in items" :key="item.name"
             active-class="selected" exact-active-class="">
             <div class="icon">
                 <Icon :iconType="item.icon" />

@@ -1,6 +1,4 @@
 <script setup>
-import MessageArea from '@/components/MessageArea/MessageArea.vue'
-
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
@@ -12,13 +10,12 @@ const router = useRouter();
 
 <template>
   <div class="container">
-    <MessageArea />
   </div>
 </template>
 
 <style lang="less" scoped>
-@import "@/styles/mixin.less";
-@import "@/styles/var.less";
+@import "./styles/mixin.less";
+@import "./styles/var.less";
 
 .app-container {
   height: 100%;

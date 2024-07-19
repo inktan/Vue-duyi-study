@@ -24,39 +24,43 @@ const props = defineProps({
   },
 })
 
-const { current, total, limit, visibleNumber } = toRefs(props);
+const selPageNum = ref(props.current)
 
-// 一个计算属性 ref
-const pageNumber = computed(() => {
-  console.log(total.value / limit.value);
-  console.log('total.value / limit.value');
-  return Math.ceil(total.value / limit.value);
+computed(() => {
+  if (selPageNum.value < 1)
+    selPageNum.value = 1;
+  else if (selPageNum.value > pageCount.value)
+    selPageNum.value = pageCount.value;
 })
 
-// console.log(total.value);
-// console.log(limit.value);
-// console.log(total.value / limit.value);
-console.log(pageNumber.value);
+const pageCount = computed(() => {
+  return Math.ceil(props.total / props.limit);
+})
 
 const show = computed(() => {
-  return pageNumber.value > 1;
+  return pageCount.value > 1;
 })
-console.log(show.value);
 
 const visiualMin = computed(() => {
-  let min = current.value - Math.floor(visibleNumber.value / 2);
+  let min = selPageNum.value - Math.floor(props.visibleNumber / 2);
   if (min < 1) {
     min = 1;
   }
-  if (min >= pageNumber.value - 9) {
-    min = pageNumber.value - 9;
+  if (min >= pageCount.value) {
+    min = pageCount.value - props.visibleNumber;
+  }
+  // 当前页码输入异常，超出最大页码
+  if (min < 1) {
+    min = 1;
+    selPageNum.value=1;
   }
   return min;
 })
+
 const visiualMax = computed(() => {
-  let max = visiualMin.value + visibleNumber.value - 1;
-  if (max > pageNumber.value) {
-    max = pageNumber.value;
+  let max = visiualMin.value + props.visibleNumber - 1;
+  if (max > pageCount.value) {
+    max = pageCount.value;
   }
   return max;
 })
@@ -71,21 +75,25 @@ const numbers = computed(() => {
 
 const emit = defineEmits(['pageChange']); // 定义一个名为 'some-event' 的事件
 
-function handleClick(newPage) {
-  if (newPage < 1) {
-    newPage = 1;
-  }
-  emit('pageChange', newPage);
+function handleClick(newPageNumber) {
+  if (newPageNumber < 1)
+    newPageNumber = 1;
+  else if (newPageNumber > pageCount)
+    newPageNumber = pageCount;
+
+  selPageNum.value = newPageNumber;
+
+  emit('pageChange', newPageNumber);
 }
 </script>
 <template>
   <!-- 只有总页数大于1时，才显示 -->
   <div class="pager-container" v-if="show">
-    <a @click="handleClick(1)" :class="{ disable: current === 1 }">|&lt;&lt;</a>
-    <a @click="handleClick(current - 1)" :class="{ disable: current === 1 }">&lt;&lt;</a>
-    <a @click="handleClick(n)" v-for="(n, i) in numbers" :key="i" :class="{ activate: n === current }">{{ n }}</a>
-    <a @click="handleClick(current + 1)" :class="{ disable: current === pageNumber }">&gt;&gt;</a>
-    <a @click="handleClick(pageNumber)" :class="{ disable: current === pageNumber }">&gt;&gt;|</a>
+    <a @click="handleClick(1)" :class="{ disable: selPageNum === 1 }">|&lt;&lt;</a>
+    <a @click="handleClick(selPageNum - 1)" :class="{ disable: selPageNum === 1 }">&lt;&lt;</a>
+    <a @click="handleClick(n)" v-for="(n, i) in numbers" :key="i" :class="{ activate: n === selPageNum }">{{ n }}</a>
+    <a @click="handleClick(selPageNum + 1)" :class="{ disable: selPageNum === pageCount }">&gt;&gt;</a>
+    <a @click="handleClick(pageCount)" :class="{ disable: selPageNum === pageCount }">&gt;&gt;|</a>
   </div>
 </template>
 

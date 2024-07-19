@@ -2,15 +2,15 @@
 import Icon from "../Icon/index.vue";
 import Contact from "./Contact/index.vue";
 import Menu from "./Menu/index.vue";
-import Avatar from "../Avatar.vue";
+
 </script>
 
 <template>
     <div class="site-asdie-container">
         <div class="avatar-container">
-            <Avatar
-                :url="'http://10.1.12.30:8081/static/gooood/Studentenwohnheim%20Hainbase%20by%20Max%20Dudler%20-%20%E8%B0%B7%E5%BE%B7%E8%AE%BE%E8%AE%A1%E7%BD%91/2_003-studentenwohnheim-hainbase-by-max-dudler.jpeg'"
-                :size="125" />
+            <el-avatar
+                src="http://10.1.12.30:8081/static/archcollege/%E6%94%BF%E6%B2%BB%E5%A4%A7%E5%AD%A6%E5%85%AC%E5%85%B1%E8%A1%8C%E6%94%BF%E5%8F%8A%E4%BC%81%E4%B8%9A%E7%AE%A1%E7%90%86%E6%95%99%E8%82%B2%E4%B8%AD%E5%BF%83%20_%20%E6%BD%98%E5%86%80%E8%81%94%E5%90%88%E5%BB%BA%E7%AD%91%E5%B8%88%E4%BA%8B%E5%8A%A1%E6%89%80/1_1650167538913278.jpeg"
+                :size="150" />
         </div>
         <h1 class="title">u_book_博客</h1>
         <Menu />
@@ -34,6 +34,10 @@ import Avatar from "../Avatar.vue";
     background-color: @dark;
     padding-top: 20px;
     overflow: auto;
+
+    .avatar-container {
+        text-align: center;
+    }
 
     .title {
         text-align: center;
