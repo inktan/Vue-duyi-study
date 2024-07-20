@@ -4,9 +4,10 @@ import BlogToc from '@/views/Blog/components/BlogToc.vue'
 import BlogDetail from '@/views/Blog/components/BlogDetail.vue'
 import BlogComment from '@/views/Blog/components/BlogComment.vue'
 
-import { ref, onBeforeMount, onMounted, onUpdated, computed, defineComponent, watch, onUnmounted } from 'vue';
+import { provide, ref, onBeforeMount, nextTick, onMounted, onUpdated, watchEffect, computed, defineComponent, watch, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getBlog } from '@/api';
+import eventBus from '@/eventBus';
 
 const route = useRoute();
 const router = useRouter();
@@ -14,29 +15,48 @@ const router = useRouter();
 const blogInfo = ref('')
 const loading = ref(false)
 const mainContainerRef = ref(null);
-const scrollTop = ref(0);
+const mainContainerRefClientHeight = ref(0);
 
-onMounted(() => {
-    const id = route.params.id;
+onMounted(async () => {
+    await nextTick();
+    mainContainerRefClientHeight.value = mainContainerRef.value.offsetHeight;
+    // 监听hash变化，使用watchEffect自动收集依赖
+    watchEffect(() => {
+        scrollToElement(route.hash);
+    });
+    mainContainerRef.value.addEventListener('scroll', handleScroll);
 })
-
-// 监视滚动条的变化
-const handleScroll = (event) => {
-    scrollTop.value = event.target.scrollTop;
-    console.log(scrollTop.value);
-};
 
 onBeforeMount(async () => {
     loading.value = true;
     blogInfo.value = await getBlog(route.params.id);
     loading.value = false;
-
-    mainContainerRef.value.addEventListener('scroll', handleScroll);
 })
 
 onUnmounted(() => {
-    mainContainerRef.value.removeEventListener('scroll', handleScroll);
+    if (mainContainerRef.value) {
+        mainContainerRef.value.removeEventListener('scroll', handleScroll);
+    }
 })
+// 监视滚动条的变化
+const handleScroll = (event) => {
+    // 当滚动事件触发时，通过事件总线调用子组件的函数
+    eventBus.emit('register-scroll', event);
+};
+
+const scrollToElement = (hash) => {
+    // 获取hash值（去除'#'）
+    hash = hash.substring(1);
+    // 查找对应的元素
+    const element = document.getElementById(hash);
+    // 如果元素存在，滚动到该元素
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+};
+
+// 使用 provide 来提供这个方法
+provide('scrollToElement', scrollToElement);
 
 </script>
 
@@ -49,11 +69,11 @@ onUnmounted(() => {
                     <BlogComment v-if="!loading" />
                 </div>
                 <el-backtop target="#main-container" :visibility-height="120" :right="100" :bottom="100" />
-                <el-color-picker />
             </template>
             <template #right>
                 <div class="right-container" v-loading="loading">
-                    <BlogToc :scrollTop="scrollTop" :toc="blogInfo.toc" v-if="blogInfo.toc" />
+                    <BlogToc :toc="blogInfo.toc" v-if="blogInfo.toc"
+                        :mainContainerRefClientHeight="mainContainerRefClientHeight" />
                     <!-- BlogToc监听 main-container 的滚动位置 -->
                 </div>
             </template>

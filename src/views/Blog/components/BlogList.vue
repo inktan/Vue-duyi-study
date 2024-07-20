@@ -69,7 +69,9 @@ watch(
 </script>
 
 <template>
-    <div class="blog-list-container" v-loading="loading" ref="containerRef">
+    <el-backtop target="#blog-list-container" :visibility-height="120" :right="100" :bottom="100" />
+
+    <div class="blog-list-container" id="blog-list-container" v-loading="loading" ref="containerRef">
         <ul>
             <li v-for="item in blogs.rows" :key="item.id">
                 <div class="thumb" v-if="item.thumb">

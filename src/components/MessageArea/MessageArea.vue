@@ -16,12 +16,13 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="message-area-container">
+  <div class="message-area-container" id="message-area-container">
     <DataForm v-bind="$attrs"/>
     <h3>{{ title }}
       <span>({{ subTitle }})</span>
     </h3>
     <DataList :list="list" />
+    <!-- 最下面底部转圈圈的效果 -->
     <div class="loading"></div>
   </div>
 </template>

@@ -69,7 +69,7 @@ Mock.mock(/^http:\/\/10.1.12.30:5000\/get_blogs(\?.+)?$/, "get", function (optio
                     },
                     "scanNumber|0-3000": 0,
                     "commentNumber|0-300": 30,
-                    "thumb|1": [Mock.Random.image("300x200", "#020115", "#fff", "Random Image"), null],
+                    "thumb|1": ["@image(300x200, #020115, #fff)", null],
                     createDate: `@date('T')`,
                 }
             ],
@@ -196,7 +196,7 @@ Mock.mock(/^http:\/\/10.1.12.30:5000\/comment\/?(\?.+)$/, "get", function (optio
         code: 0,
         msg: "用于 E2E 测试",
         data: {
-            "total|50-80": 0,
+            "total|30": 0,
             [`rows|${queryParams.limit || 10}`]: [
                 {
                     id: "@guid",

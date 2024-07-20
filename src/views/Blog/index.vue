@@ -12,9 +12,10 @@ import BlogCategory from '@/views/Blog/components/BlogCategory.vue'
             <template #left>
             </template>
             <template #main>
-                <div class="main-container">
+                <div class="main-container" id="main-container">
                     <BlogList />
                 </div>
+
             </template>
             <template v-slot:right>
                 <div class="right-container">

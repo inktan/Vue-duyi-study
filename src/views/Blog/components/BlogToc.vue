@@ -2,6 +2,9 @@
 import { ref, onBeforeMount, onMounted, onUpdated, computed, defineComponent, watch, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import RightList from './RightList.vue';
+import { debounce } from '@/utils'
+import eventBus from '@/eventBus';
+
 const route = useRoute();
 const router = useRouter();
 
@@ -10,14 +13,17 @@ const activeAnchor = ref('')
 
 const props = defineProps({
     toc: { type: Array, required: true, },
-    scrollTop: { type: Number },
+    mainContainerRefClientHeight: { type: Number },
 })
+onMounted(() => {
+    debounceSetSelect();
+  eventBus.on('register-scroll', debounceSetSelect);
 
-watch(() => props.scrollTop, (newValue, oldValue) => {
-    console.log('Scroll position updated:', props.scrollTop);
-    setSelect();
+});
+onUnmounted(()=>{
+  eventBus.off('register-scroll', debounceSetSelect);
+
 })
-
 function handleSelect(item) {
     // 设置activaAnchor为正确的值
     activeAnchor.value = item.anchor
@@ -25,27 +31,30 @@ function handleSelect(item) {
         hash: '#' + item.anchor,
     });
 }
+
+// 函数防抖
+const debounceSetSelect = debounce(setSelect, 100);
+
 function setSelect() {
-    activeAnchor.value = ''
-    const range = 200;
+    // activeAnchor.value = ''
+    const range = props.mainContainerRefClientHeight;
     for (const dom of doms.value) {
         if (!dom) {
             continue;
         }
         const top = dom.getBoundingClientRect().top
-        if (top >= 0 && top <= range) {
-            activeAnchor.value = dom.id;
-            return;
-        } else if (top > range) {
-            return;
-        } else {
+        // console.log(top)
+        // continue
+        if (top >= 0 && top < range * 0.3) {
             activeAnchor.value = dom.id;
             return;
         }
+        // 当下一个锚点超过滑动区域一半高度的时候
     }
 }
 
 const tocWithSelect = computed(() => {
+    // console.log(activeAnchor.value);
     const getToc = ((toc = []) => {
         return toc.map(t => ({
             ...t,
