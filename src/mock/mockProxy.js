@@ -69,7 +69,8 @@ Mock.mock(/^http:\/\/10.1.12.30:5000\/get_blogs(\?.+)?$/, "get", function (optio
                     },
                     "scanNumber|0-3000": 0,
                     "commentNumber|0-300": 30,
-                    "thumb|1": ["@image(300x200, #020115, #fff)", null],
+                    // "thumb|1": ["@image(300x200, @color, #fff, @natural)", null],
+                    "thumb|1": ["@image(300x200, @color, #fff, @natural)"],
                     createDate: `@date('T')`,
                 }
             ],

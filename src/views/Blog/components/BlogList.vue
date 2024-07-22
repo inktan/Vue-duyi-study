@@ -81,7 +81,13 @@ watch(
                             id: item.id,
                         }
                     }">{{ item.category.name }}
-                        <img :src="item.thumb" :alt="item.title" :title="item.title">
+                        <!-- <el-image :src="item.thumb" :alt="item.title" :title="item.title" lazy /> -->
+                        <el-image :src="item.thumb" :alt="item.title" :title="item.title" lazy>
+                            <template #placeholder>
+                                <div class="image-slot">Loading<span class="dot">...</span></div>
+                            </template>
+                        </el-image>
+
                     </RouterLink>
                 </div>
                 <div class="main">
