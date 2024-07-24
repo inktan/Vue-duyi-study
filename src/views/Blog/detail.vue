@@ -65,6 +65,7 @@ provide('scrollToElement', scrollToElement);
         <Layout>
             <template #main>
                 <div class="main-container" id="main-container" v-loading="loading" ref="mainContainerRef">
+                    
                     <BlogDetail v-if="blogInfo" :blog="blogInfo" />
                     <BlogComment v-if="!loading" />
                 </div>

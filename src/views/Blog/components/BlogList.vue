@@ -9,7 +9,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
-const blogs = ref([])
+const blogs = ref({})
 const loading = ref(true)
 
 onBeforeMount(async () => {
@@ -20,8 +20,8 @@ onBeforeMount(async () => {
 
 const routeInfo = computed(() => {
     const categoryId = parseInt(route.params.categoryId) || -1;
-    const page = parseInt(route.query.page) || 1;
-    const limit = parseInt(route.query.limit) || 10;
+    const page = parseInt(route.query.page) || 0;
+    const limit = parseInt(route.query.limit) || 0
     return {
         categoryId,
         page,
@@ -70,7 +70,7 @@ watch(
 
 <template>
     <el-backtop target="#blog-list-container" :visibility-height="120" :right="100" :bottom="100" />
-
+    <el-empty description="+++++" v-if=" !loading" />
     <div class="blog-list-container" id="blog-list-container" v-loading="loading" ref="containerRef">
         <ul>
             <li v-for="item in blogs.rows" :key="item.id">

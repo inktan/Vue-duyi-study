@@ -7,15 +7,18 @@ const router = useRouter();
 </script>
 
 <template>
-  <div class="container">
-  </div>
+    <div class="container">
+        <h2>
+            404 找不到页面
+        </h2>
+    </div>
 </template>
 
 <style lang="less" scoped>
-@import "./styles/mixin.less";
-@import "./styles/var.less";
+@import "@/styles/mixin.less";
+@import "@/styles/var.less";
 
 .app-container {
-  height: 100%;
+    height: 100%;
 }
 </style>

@@ -17,11 +17,11 @@ const props = defineProps({
 })
 onMounted(() => {
     debounceSetSelect();
-  eventBus.on('register-scroll', debounceSetSelect);
+    eventBus.on('register-scroll', debounceSetSelect);
 
 });
-onUnmounted(()=>{
-  eventBus.off('register-scroll', debounceSetSelect);
+onUnmounted(() => {
+    eventBus.off('register-scroll', debounceSetSelect);
 
 })
 function handleSelect(item) {

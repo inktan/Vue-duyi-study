@@ -211,6 +211,18 @@ Mock.mock(/^http:\/\/10.1.12.30:5000\/comment\/?(\?.+)$/, "get", function (optio
 })
 // console.log("mock")
 
-
+// 查询任一篇博客
+Mock.mock("http://10.1.12.30:5000/setting", "post", {
+    code: 0,
+    msg: "用于 E2E 测试",
+    data:
+    {  
+        id: "@guid",
+        nickname: "1642@cname",
+        content: "@cparagraph(1,10)",
+        createDate: Date.now(),
+    },
+})
+// console.log("mock")
 
 

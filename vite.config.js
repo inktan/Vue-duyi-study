@@ -4,8 +4,10 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
+
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/',
   plugins: [
     vue(),
     vueDevTools(),
@@ -15,6 +17,20 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  //vue.config.js
+  // configureWebpack: require('./webpack.config')
+
+  build: {
+    rollupOptions: {
+      external: [
+        // "Vue",
+        // "Vuex",
+        // "VueRouter",
+        // "axios",
+      ]
+    }
+  }
+
   // server: {
   // port: 5000, // 设置服务器端口
   // open: true, // 自动打开浏览器

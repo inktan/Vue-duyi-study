@@ -1,7 +1,9 @@
+<script setup></script>
+
 <template>
     <div>
-        <h1>关于</h1>
+        <iframe src="http://10.1.12.30:8081/" frameborder="0"></iframe>
+        <iframe src="http://www.baidu.com" frameborder="0"></iframe>
     </div>
 </template>
-<script></script>
 <style lang="less" scoped></style>

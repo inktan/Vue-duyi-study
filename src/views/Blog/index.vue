@@ -13,6 +13,7 @@ import BlogCategory from '@/views/Blog/components/BlogCategory.vue'
             </template>
             <template #main>
                 <div class="main-container" id="main-container">
+                    
                     <BlogList />
                 </div>
 

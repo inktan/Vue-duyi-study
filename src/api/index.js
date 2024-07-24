@@ -49,3 +49,7 @@ export async function getComments(blogid, page = 1, limit = 10) {
     });
 }
 
+// 获取全局设置
+export async function getSetting() {
+    return await request.get('http://10.1.12.30:5000/setting')
+}
